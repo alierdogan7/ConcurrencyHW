@@ -1,3 +1,5 @@
+package com.burak;
+
 /**
  * Created by burak on 15.12.2015.
  */

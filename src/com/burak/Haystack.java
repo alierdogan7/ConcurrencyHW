@@ -1,5 +1,11 @@
+package com.burak;
+
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
 
 public class Haystack {
 
@@ -14,7 +20,6 @@ public class Haystack {
     */
 
     public static void main(String[] args) {
-	// write your code here
 
         int size = 1000;
         Person[] list = new Person[size];
@@ -33,6 +38,11 @@ public class Haystack {
 
     static <T> int search(T needle, T[] haystack, int numThreads)  {
 
+        //Lock lock = new ReentrantLock();
+        //Condition needleFound = lock.newCondition();
+
+        AtomicBoolean needleFound = new AtomicBoolean(false);
+
         List<SearcherThread<T>> searchers = new ArrayList<SearcherThread<T>>();
 
         int numItemsPerThread = haystack.length / numThreads;
@@ -40,7 +50,8 @@ public class Haystack {
 
         for(int i = 0, intStart = 0; i < numThreads; i++){
             int numItems = ( i < extraItems) ? (1 + numItemsPerThread) : numItemsPerThread;
-            searchers.add( new SearcherThread<T>(needle, haystack, intStart, intStart + numItems - 1) );
+            searchers.add( new SearcherThread<T>(needle, haystack, intStart, intStart + numItems - 1,
+                                                    needleFound ) );
             intStart += numItems;
         }
 
@@ -56,6 +67,11 @@ public class Haystack {
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+        }
+
+        for(SearcherThread<T> searcher : searchers)
+        {
+            System.out.println(searcher.toString() + "- RESULT: " + searcher.getResult());
         }
 
         return 3;
