@@ -23,6 +23,7 @@ public class SearcherThread<T> extends Thread {
         this.start = start;
         this.end = end;
         this.needleFound = needleFound;
+        this.result = -1;
     }
 
     @Override
@@ -38,6 +39,7 @@ public class SearcherThread<T> extends Thread {
             }
 
             if( haystack[i].equals(needle) ){
+                System.out.println("needle is found by thread " + this.toString() );
                 result = i;
                 needleFound.set(true);
                 break;

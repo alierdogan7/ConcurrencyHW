@@ -21,19 +21,25 @@ public class Haystack {
 
     public static void main(String[] args) {
 
+        int needleLoc = 936;
         int size = 1000;
         Person[] list = new Person[size];
         for(int i = 0; i < size; i++)
         {
             int tmpId = (int) (Math.random() * 10000);
 
-            if( i == 503 )
+            if( i == needleLoc )
                 list[i] = new Person(tmpId);
             else
-                list[i] = new Person(19991); //place the needle to 503rd location with id 19991
+                list[i] = new Person(19991); //place the needle to desired location with id 19991
         }
 
-        search( list[503], list, 7);
+        int result = search( list[needleLoc], list, 7);
+        if( result == -1)
+            System.out.println( "Found on nowhere!");
+        else
+            System.out.println("Found on " + result + ".place");
+
     }
 
     static <T> int search(T needle, T[] haystack, int numThreads)  {
@@ -71,10 +77,10 @@ public class Haystack {
 
         for(SearcherThread<T> searcher : searchers)
         {
-            System.out.println(searcher.toString() + "- RESULT: " + searcher.getResult());
+            if( searcher.getResult() != -1)
+                return searcher.getResult();
         }
 
-        return 3;
-
+        return -1;
     }
 }

@@ -21,6 +21,12 @@ public class Person {
     @Override
     public boolean equals(Object o)
     {
-         return ((Person) o).getId() == this.id;
+        /*try {
+            Thread.sleep(10);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }*/
+
+        return ((Person) o).getId() == this.id;
     }
 }
